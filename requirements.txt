@@ -1,0 +1,6 @@
+Django==1.10.5
+django-debug-toolbar==1.6
+django-allauth==0.30.0
+django-heroku-postgresify==0.4
+psycopg2==2.6.2
+Jinja2==2.9.5

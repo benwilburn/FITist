@@ -1,3 +1,6 @@
 from django.contrib import admin
+from exercises.models import Exercise
+from exercises.models import Type
 
-# Register your models here.
+admin.site.register(Exercise)
+admin.site.register(Type)

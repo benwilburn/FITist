@@ -1,3 +1,4 @@
 from django.contrib import admin
+from muscle_groups.models import MuscleGroup
 
-# Register your models here.
+admin.site.register(MuscleGroup)

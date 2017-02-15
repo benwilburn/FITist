@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'questions'
+    'user_profiles',
+    'muscle_groups',
+    'exercises',
+    'workout_programs',
+    'questions',
 ]
 
 MIDDLEWARE = [

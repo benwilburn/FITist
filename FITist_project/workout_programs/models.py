@@ -83,26 +83,26 @@ class Measurement(models.Model):
     description = models.TextField()
 
 
-class Sets(Measurement):
-    number = models.IntegerField(default=0)
-    set_order = models.IntegerField(default=0, blank=True, null=True)
-    exercise_block = models.ForeignKey(ExerciseBlock)
-
-
-class Reps(Measurement):
-    number = models.IntegerField(default=0)
-    rep_order = models.IntegerFeild(default=0, blank=True, null=True)
-    exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
-    set_which_work_should_be_performed = models.ForeignKey(
-        Sets,
-        blank=True,
-        null=True)
-
-
-class Duration(Measurement):
-    time = models.DurationField()
-    exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
-    set_which_work_should_be_performed = models.ForeignKey(
-        Sets,
-        blank=True,
-        null=True)
+# class Sets(Measurement):
+#     number = models.IntegerField(default=0)
+#     set_order = models.IntegerField(default=0, blank=True, null=True)
+#     exercise_block = models.ForeignKey(ExerciseBlock)
+#
+#
+# class Reps(Measurement):
+#     number = models.IntegerField(default=0)
+#     rep_order = models.IntegerFeild(default=0, blank=True, null=True)
+#     exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
+#     set_which_work_should_be_performed = models.ForeignKey(
+#         Sets,
+#         blank=True,
+#         null=True)
+#
+#
+# class Duration(Measurement):
+#     time = models.DurationField()
+#     exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
+#     set_which_work_should_be_performed = models.ForeignKey(
+#         Sets,
+#         blank=True,
+#         null=True)

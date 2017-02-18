@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0001_initial'),
+        ('exercise_library', '0001_initial'),
     ]
 
     operations = [
@@ -32,6 +32,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='exercise',
             name='exercise_type',
-            field=models.ManyToManyField(related_name='associated_lifts', to='exercises.Type'),
+            field=models.ManyToManyField(related_name='associated_lifts', to='exercise_library.Type'),
         ),
     ]

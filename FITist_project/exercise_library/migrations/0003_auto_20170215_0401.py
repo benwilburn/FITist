@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0002_auto_20170215_0351'),
+        ('exercise_library', '0002_auto_20170215_0351'),
     ]
 
     operations = [

@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0005_remove_exercise_main_muscle_group_targeted'),
+        ('exercise_library', '0005_remove_exercise_main_muscle_group_targeted'),
         ('muscle_groups', '0001_initial'),
     ]
 
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='musclegroup',
             name='associated_lifts',
-            field=models.ManyToManyField(related_name='muscles_used', to='exercises.Exercise'),
+            field=models.ManyToManyField(related_name='muscles_used', to='exercise_library.Exercise'),
         ),
         migrations.AddField(
             model_name='musclegroup',

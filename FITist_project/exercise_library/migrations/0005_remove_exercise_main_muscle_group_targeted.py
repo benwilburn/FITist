@@ -8,7 +8,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exercises', '0004_exercise_video'),
+        ('exercise_library', '0004_exercise_video'),
     ]
 
     operations = [

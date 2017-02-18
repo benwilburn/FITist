@@ -1,6 +1,6 @@
 from django.contrib import admin
-from exercises.models import Exercise
-from exercises.models import Type
+from exercise_library.models import Exercise
+from exercise_library.models import Type
 
 admin.site.register(Exercise)
 admin.site.register(Type)

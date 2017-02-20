@@ -28,6 +28,11 @@ class Exercise(models.Model):
     exercise_priority = models.IntegerField(default=0, blank=True)
     video = models.FileField(blank=True, null=True)
 
+    class Meta(object):
+        """Will order by exercise_priority."""
+
+        ordering = ['exercise_priority', ]
+
     def __str__(self):
         """Will return exercise name as query object description."""
         return self.name

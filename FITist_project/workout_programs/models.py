@@ -14,24 +14,12 @@ class Program(models.Model):
         return self.name
 
 
-class Week(models.Model):
-    """A program can have multiple weeks(and most likely will)."""
-
-    number = models.IntegerField(default=0)
-    program = models.ManyToManyField(Program)
-    completed = models.BooleanField(default=False)
-
-    def __str__(self):
-        """Will return week number as query set description."""
-        return self.number
-
-
 class Workout(models.Model):
     """A week(and program) can have multiple workouts."""
 
     name = models.CharField(max_length=255)
     order = models.IntegerField(default=0)
-    week_number = models.ForeignKey(Week)
+    week_number = models.IntegerField()
     program = models.ForeignKey(Program)
     completed = models.BooleanField(default=False)
 
@@ -50,7 +38,7 @@ class ExerciseGroup(models.Model):
         related_name='assocated_exercise_groups')
 
     class Meta(object):
-        """orders each group based on the order number assigned."""
+        """Orders each group based on the order number assigned."""
 
         ordering = ['order', ]
 
@@ -68,41 +56,51 @@ class ExerciseBlock(models.Model):
     """
 
     exercise = models.ForeignKey(Exercise)
+    order = models.IntegerField(defaut=0, blank=True)
     assigned_group = models.ForeignKey(
         ExerciseGroup,
         related_name='associated_exercise_blocks')
+
+    class Meta(object):
+        """Orders each exercise by exercse.exercise_priorty."""
+
+        ordering = ['exercise.exercise_priority', 'order', ]
 
     def __str__(self):
         """Will return the name of the exercise in the block."""
         return self.exercise['name']
 
 
+class MeasurementType(models.Model):
+    """Can be many types of measurements."""
+
+    name = models.CharField(max_length=255)
+
+
 class Measurement(models.Model):
     """Each exercise block needs a measurement."""
 
     description = models.TextField()
+    number = models.IntegerField()
+    measurement_type = models.ForeignKey(MeasurementType)
 
 
-# class Sets(Measurement):
-#     number = models.IntegerField(default=0)
-#     set_order = models.IntegerField(default=0, blank=True, null=True)
-#     exercise_block = models.ForeignKey(ExerciseBlock)
+class Set(models.Model):
+    number = models.IntegerField(default=0)
+    set_order = models.IntegerField(default=0, blank=True, null=True)
+    exercise_block = models.ForeignKey(ExerciseBlock)
 #
 #
-# class Reps(Measurement):
+# class Rep(Measurement):
 #     number = models.IntegerField(default=0)
 #     rep_order = models.IntegerFeild(default=0, blank=True, null=True)
 #     exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
 #     set_which_work_should_be_performed = models.ForeignKey(
-#         Sets,
-#         blank=True,
-#         null=True)
+#         Set)
 #
 #
 # class Duration(Measurement):
 #     time = models.DurationField()
 #     exercise_block = models.ForeignKey(ExerciseBlock, blank=True, null=True)
 #     set_which_work_should_be_performed = models.ForeignKey(
-#         Sets,
-#         blank=True,
-#         null=True)
+#         Sets)

@@ -7,6 +7,7 @@ class Program(models.Model):
     """Program that customers pay for."""
 
     name = models.CharField(max_length=255)
+    total_weeks = models.IntegerField(default=1)
     completed = models.BooleanField(default=False)
 
     def __str__(self):
@@ -19,7 +20,7 @@ class Workout(models.Model):
 
     name = models.CharField(max_length=255)
     order = models.IntegerField(default=0)
-    week_number = models.IntegerField()
+    week_number = models.IntegerField(default=1)
     program = models.ForeignKey(Program)
     completed = models.BooleanField(default=False)
 
@@ -68,7 +69,7 @@ class ExerciseBlock(models.Model):
 
     def __str__(self):
         """Will return the name of the exercise in the block."""
-        return self.exercise['name']
+        return self.exercise.name
 
 
 class MeasurementType(models.Model):
@@ -76,19 +77,33 @@ class MeasurementType(models.Model):
 
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        """Will return measurement type name as query set description."""
+        return self.name
+
 
 class Measurement(models.Model):
     """Each exercise block needs a measurement."""
 
-    description = models.TextField()
     number = models.IntegerField()
     measurement_type = models.ForeignKey(MeasurementType)
+
+    def __str__(self):
+        """Will return measurement description for query set description."""
+        return "{}, {}".format(self.measurement_type.name, self.number)
 
 
 class Set(models.Model):
     """Each exercise block will have a set or sets."""
 
-    number = models.IntegerField(default=0)
     set_order = models.IntegerField(default=0, blank=True, null=True)
-    exercise_block = models.ForeignKey(ExerciseBlock)
-    measurement = models.ForeignKey(Measurement)
+    exercise_block = models.ForeignKey(
+        ExerciseBlock,
+        related_name='sets_to_be_completed')
+    measurement = models.ManyToManyField(Measurement)
+
+    def __str__(self):
+        """Returns set number & ExerciseBlock name as query set description."""
+        return "{}, set_order: {}".format(
+            self.exercise_block.exercise.name,
+            self.set_order)

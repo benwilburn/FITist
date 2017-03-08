@@ -3,16 +3,27 @@ from django.db import models
 from exercise_library.models import Exercise
 
 
+class ProgramTag(models.Model):
+    """Each program has multiple tags that separate it from other programs."""
+
+    label = models.CharField(max_length=50)
+
+    def __str__(self):
+        """Will return the label as the query set description."""
+        return self.label
+
+
 class Program(models.Model):
     """Program that customers pay for."""
 
     name = models.CharField(max_length=255)
     total_weeks = models.IntegerField(default=1)
     completed = models.BooleanField(default=False)
+    tags = models.ManyToManyField(ProgramTag)
 
     def __str__(self):
         """Will return Workout Program name for query set description."""
-        return self.name
+        return "{}".format(self.name)
 
 
 class Workout(models.Model):
@@ -61,6 +72,8 @@ class ExerciseBlock(models.Model):
     assigned_group = models.ForeignKey(
         ExerciseGroup,
         related_name='associated_exercise_blocks')
+    prescription = models.TextField(
+        default="no prescription has been written yet")
 
     class Meta(object):
         """Orders each exercise by Exercse.exercise_priorty."""
@@ -72,38 +85,38 @@ class ExerciseBlock(models.Model):
         return self.exercise.name
 
 
-class MeasurementType(models.Model):
-    """Can have many types of measurements."""
-
-    name = models.CharField(max_length=255)
-
-    def __str__(self):
-        """Will return measurement type name as query set description."""
-        return self.name
-
-
-class Measurement(models.Model):
-    """Each exercise block needs a measurement."""
-
-    number = models.IntegerField()
-    measurement_type = models.ForeignKey(MeasurementType)
-
-    def __str__(self):
-        """Will return measurement description for query set description."""
-        return "{}, {}".format(self.measurement_type.name, self.number)
-
-
-class Set(models.Model):
-    """Each exercise block will have a set or sets."""
-
-    set_order = models.IntegerField(default=0, blank=True, null=True)
-    exercise_block = models.ForeignKey(
-        ExerciseBlock,
-        related_name='sets_to_be_completed')
-    measurement = models.ManyToManyField(Measurement)
-
-    def __str__(self):
-        """Returns set number & ExerciseBlock name as query set description."""
-        return "{}, set_order: {}".format(
-            self.exercise_block.exercise.name,
-            self.set_order)
+# class MeasurementType(models.Model):
+#     """Can have many types of measurements."""
+#
+#     name = models.CharField(max_length=255)
+#
+#     def __str__(self):
+#         """Will return measurement type name as query set description."""
+#         return self.name
+#
+#
+# class Measurement(models.Model):
+#     """Each exercise block needs a measurement."""
+#
+#     number = models.IntegerField()
+#     measurement_type = models.ForeignKey(MeasurementType)
+#
+#     def __str__(self):
+#         """Will return measurement description for query set description."""
+#         return "{}, {}".format(self.measurement_type.name, self.number)
+#
+#
+# class Set(models.Model):
+#     """Each exercise block will have a set or sets."""
+#
+#     set_order = models.IntegerField(default=0, blank=True, null=True)
+#     exercise_block = models.ForeignKey(
+#         ExerciseBlock,
+#         related_name='sets_to_be_completed')
+#     measurement = models.ManyToManyField(Measurement)
+#
+#     def __str__(self):
+#         """Will set number & ExerciseBlock name as query set description."""
+#         return "{}, set_order: {}".format(
+#             self.exercise_block.exercise.name,
+#             self.set_order)

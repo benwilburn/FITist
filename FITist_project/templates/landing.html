@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+
+{% block title %}FITist{% endblock %}
+
+{% block content %}
+    <nav><a href="{% url 'profiles:login' %}">Login</a></nav>
+    <h3>Welcome to FITist.</h3>
+    <div>
+        <p><strong>Our Mission:</strong></p>
+        <p>Bring <u>Affordable Fitness Programming</u> to everyone,</p>
+        <p>from fitness professionals with <u>20</u> years of experience.</p>
+    </div>
+    <div>
+        <p>Before you begin your journey, we need to ask a few questions.</p>
+        <a href="{% url 'questions:list' %}">Get Started</a>
+    </div>
+{% endblock %}

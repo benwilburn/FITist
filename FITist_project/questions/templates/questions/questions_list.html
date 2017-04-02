@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+
+{% block title %}What are you looking for?{% endblock %}
+
+{% block content %}
+    <p>This is the questions page.</p>
+    <div>
+        <form action="{% url 'get_program' %}" method="POST">
+            {% csrf_token %}
+            {% for question in questions %}
+                {% if question.prompt == "What is your gender?" %}
+                    <p>What is your gender?</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="radio" name="gender" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+                {% if question.prompt == "What is your goal?" %}
+                    <p>What is your goal?</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="radio" name="goal" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+                {% if question.prompt == "What is your level of training experience?" %}
+                    <p>What is your level of training experience?</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="radio" name="experience" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+                {% if question.prompt == "Length of the program you're looking for?" %}
+                    <p>Length of the program you're looking for?</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="radio" name="length" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+                {% if question.prompt == "How many days per week do you want to workout?" %}
+                    <p>How many days per week do you want to workout?</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="radio" name="per_week" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+                {% if question.prompt == "Equipment available to you:" %}
+                    <p>Equipment available to you:</p>
+                    {% for answer in question.answer_set.all %}
+                        <input type="checkbox" id="{{ value }}"
+                        name="equipment_available" value="{{ answer }}">{{ answer }}
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            <p><input type="submit"></p>
+        </form>
+    </div>
+{% endblock %}

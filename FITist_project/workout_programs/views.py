@@ -1,3 +1,2 @@
-from django.shortcuts import render
-
-# Create your views here.
+"""Will setup the workout view for each customer."""
+# from django.shortcuts import render

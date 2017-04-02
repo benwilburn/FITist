@@ -6,6 +6,7 @@ class Question(models.Model):
 
     prompt = models.TextField()
     order = models.IntegerField(default=0)
+    label = models.CharField(default="", max_length=255)
 
     class Meta(object):
         """This is a new style class inheriting from object.

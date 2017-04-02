@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block title %}Workout of the Day{% endblock %}
+
+{% block content %}
+    <h1>This is the program page</h1>
+
+    <p>Name: {{ selected_program.name }}</p>
+    <p>Number Of Weeks: {{ selected_program.total_weeks }}</p>
+    <p>Program Tags:</p>
+    <ul>
+        {% for tag in selected_program.tags.all %}
+            <li>{{ tag }}</li>
+        {% endfor %}
+    </ul>
+    <p>Completed: {{ selected_program.completed }}</p>
+
+    <a href="{% url 'questions:list' %}">Change Program</a>
+{% endblock %}

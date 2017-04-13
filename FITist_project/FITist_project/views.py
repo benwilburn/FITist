@@ -1,4 +1,5 @@
 """Main project views."""
+from django.db.models import Count
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import reverse
@@ -16,8 +17,35 @@ def grab_program_that_matches_criteria(request):
     This query should only grab one program.
     """
     form_data = request.POST
+    # Added all items I wanted to filter selected_program by.
+    all_tags_to_filter = [
+        form_data['gender'],
+        form_data['goal'],
+        form_data['experience'],
+        form_data['length'],
+        form_data['per_week']
+    ]
+    # Grab the list from the screening form.
     available_equipment = form_data.getlist('equipment_available')
-    selected_program = Program.objects.filter(
+    # Loop through list of equipment and append it to all_tags_to_filter list.
+    for equipment in available_equipment:
+        all_tags_to_filter.append(equipment)
+    # Adding a count field to all Programs; equals the number of tags it has.
+    # then filter each program by the first item in all_tags_to_filter list.
+    selected_program = Program.objects.annotate(
+        count=Count('tags')
+    ).filter(
+        tags__text=available_equipment[0]
+    )
+    # loop through remaining items in all_tags_to_filter and add corresponding
+    # filter.
+    for equipment in available_equipment[1:]:
+        selected_program = selected_program.filter(tags__text=equipment)
+    # filter remaining programs for count value by len of all_tags_to_filter.
+    # add filter for each remaining screening question (gender/goal/etc).
+    selected_program = selected_program.filter(
+        count=len(all_tags_to_filter)
+    ).filter(
         tags__text=form_data['gender']
     ).filter(
         tags__text=form_data['goal']
@@ -27,10 +55,9 @@ def grab_program_that_matches_criteria(request):
         tags__text=form_data['length']
     ).filter(
         tags__text=form_data['per_week']
-    ).filter(
-        tags__text__in=available_equipment
     ).first()
-    if selected_program is None:
+    print('selected_program', selected_program)
+    if not selected_program:
         return render(request,
                       'workout.html',
                       {
@@ -43,12 +70,9 @@ def grab_program_that_matches_criteria(request):
                       })
     else:
         request.session['program_pk'] = selected_program.pk
-        print('CURRENT USER', request.user)
         if request.user.is_anonymous():
-            print("THERE IS NO USER!!!!!!")
             return redirect(reverse('profiles:new_user'))
         else:
-            print("YOU ARE THE ONLY USER!!!!!!!")
             return render(request,
                           'workout.html',
                           {'selected_program': selected_program}

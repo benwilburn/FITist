@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Workout of the Day{% endblock %}
+
+{% block content %}
+    <h1>This is the program page</h1>
+
+    <p>Program Name: {{ program.name }}</p>
+    <p>Number Of Weeks: {{ program.total_weeks }}</p>
+    {% for workout in workouts %}
+        <div>
+            <p>{{ workout.name }}</p>
+            {% for group in exercise_groups %}
+                {% if group.workout_group_belongs_to == workout %}
+                    {% for exercise in exercise_blocks %}
+                        {% if exercise.assigned_group == group %}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Exercise</th>
+                                        <th>Prescription</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ exercise.exercise }}</td>
+                                        <td>{{ exercise.prescription }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        {% endif %}
+                    {% endfor %}
+                    <p>Description: {{ group.description }}</p>
+                {% endif %}
+            {% endfor %}
+            <p>Completed {{ workout.completed }}</p>
+        </div>
+    {% endfor %}
+
+    <a href="{% url 'questions:list' %}">Change Program</a>
+{% endblock %}

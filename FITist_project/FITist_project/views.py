@@ -18,6 +18,7 @@ def grab_program_that_matches_criteria(request):
 
     This query should only grab one program.
     """
+    current_user = request.user
     form_data = request.POST
     # Added all items I wanted to filter selected_program by.
     all_tags_to_filter = [
@@ -72,10 +73,9 @@ def grab_program_that_matches_criteria(request):
                       })
     else:
         request.session['program_pk'] = selected_program.pk
-        if request.user.is_anonymous():
+        if current_user.is_anonymous():
             return redirect(reverse('profiles:new_user'))
         else:
-            return render(request,
-                          'workout.html',
-                          {'selected_program': selected_program}
-                          )
+            current_user.profile.program_selected = selected_program
+            current_user.profile.save()
+            return redirect(reverse('profiles:user_profile'))

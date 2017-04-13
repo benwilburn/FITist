@@ -8,4 +8,5 @@
     <p>{{ user.email }}</p>
     <p>{{ user.profile.program_selected }}</p>
     <a href="{% url 'profiles:logout' %}">Logout</a>
+    <a href="{% url 'questions:list' %}">Change Program</a>
 {% endblock %}

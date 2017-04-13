@@ -1,4 +1,5 @@
 """Main project views."""
+from django.views.decorators.http import require_POST
 from django.db.models import Count
 from django.shortcuts import render
 from django.shortcuts import redirect
@@ -11,6 +12,7 @@ def landing_page(request):
     return render(request, 'landing.html')
 
 
+@require_POST
 def grab_program_that_matches_criteria(request):
     """Query the database for the answers to screening.
 

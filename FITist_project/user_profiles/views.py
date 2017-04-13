@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-# from django.shortcuts import reverse
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth import login
@@ -11,13 +10,12 @@ from user_profiles.models import Profile
 from workout_programs.models import Program
 
 
-# Create your views here.
 def create_new_user(request):
     form = UserForm()
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            new_user = form.save()
+            new_user = form.save(commit=False)
             new_user_password = new_user.password
             new_user.set_password(new_user.password)
             new_user.save()
@@ -33,7 +31,7 @@ def create_new_user(request):
                                     username=new_user.username,
                                     password=new_user_password
                                 )
-            if authenticated_user is not None:
+            if authenticated_user:
                 login(request, authenticated_user)
                 return redirect(
                     'profiles:user_profile',
@@ -51,7 +49,7 @@ def create_new_user(request):
 
 @login_required(login_url='/user_profiles/login/')
 def get_profile(request, username=None):
-    if username is None:
+    if not username:
         return redirect(
             'profiles:user_profile',
             permanent=True,

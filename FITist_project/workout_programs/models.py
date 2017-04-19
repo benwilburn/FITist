@@ -1,5 +1,6 @@
 """Models for workouts."""
 from django.db import models
+from django.shortcuts import get_object_or_404
 from exercise_library.models import Exercise
 from questions.models import Answer
 
@@ -75,3 +76,7 @@ class ExerciseBlock(models.Model):
     def __str__(self):
         """Will return the name of the exercise in the block."""
         return self.exercise.name
+
+
+def get_program_instance(program_pk):
+    return get_object_or_404(Program, pk=program_pk)

@@ -1,45 +1,28 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from user_profiles.forms import UserForm
 from django.contrib.auth.models import User
-from user_profiles.models import Profile
-from workout_programs.models import Program
+from user_profiles.models import create_user_profile
+from workout_programs.models import get_program_instance
 
 
 def create_new_user(request):
+    session = request.session
     form = UserForm()
     if request.method == "POST":
-        form = UserForm(request.POST)
-        if form.is_valid():
-            new_user = form.save(commit=False)
-            new_user_password = new_user.password
-            new_user.set_password(new_user.password)
-            new_user.save()
-            program = get_object_or_404(Program,
-                                        pk=request.session["program_pk"]
-                                        )
-            Profile.objects.create(
-                user=new_user,
-                program_selected=program
+        user = UserForm(request.POST)
+        if user.is_valid():
+            program = get_program_instance(program_pk=session["program_pk"])
+            user = user.save()
+            create_user_profile(user=user, program=program)
+            login(request, user)
+            return redirect(
+                'profiles:user_profile',
+                username=user.username
             )
-            # might not be needed but added authentication in here as well
-            authenticated_user = authenticate(
-                                    username=new_user.username,
-                                    password=new_user_password
-                                )
-            if authenticated_user:
-                login(request, authenticated_user)
-                return redirect(
-                    'profiles:user_profile',
-                    permanent=True,
-                    username=new_user.username
-                )
-            else:
-                return redirect('profiles:new_user')
     return render(
         request,
         'user_profiles/registration.html',
@@ -49,12 +32,9 @@ def create_new_user(request):
 
 @login_required(login_url='/user_profiles/login/')
 def get_profile(request, username=None):
+    curr_user = request.user
     if not username:
-        return redirect(
-            'profiles:user_profile',
-            permanent=True,
-            username=request.user.username,
-            )
+        return redirect('profiles:user_profile', username=curr_user.username)
     user = get_object_or_404(User, username=username)
     if request.user == user:
         return render(
@@ -63,8 +43,4 @@ def get_profile(request, username=None):
             {'user': user}
         )
     else:
-        return redirect(
-            'profiles:user_profile',
-            permanent=True,
-            username=request.user.username,
-        )
+        return redirect('profiles:user_profile', username=curr_user.username)

@@ -21,7 +21,6 @@ class LoginForm(AuthenticationForm):
 
 
 class UserForm(forms.ModelForm):
-    username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     email = forms.CharField(widget=forms.EmailInput)

@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from workout_programs.models import Program
 
@@ -12,5 +14,14 @@ class Profile(models.Model):
         """Will return User object str for query set description."""
         return "{}".format(self.user)
 
-    def get_absolute_url(self):
-        return "/user_profiles/{}".format(self.user.username)
+
+def create_user_profile(user, program):
+        Profile.objects.create(
+            user=user,
+            program_selected=program
+        )
+
+
+@receiver(pre_save, sender=User)
+def set_user_password(sender, instance, *args, **kwargs):
+    instance.set_password(instance.password)

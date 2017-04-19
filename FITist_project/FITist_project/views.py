@@ -28,36 +28,20 @@ def grab_program_that_matches_criteria(request):
         form_data['length'],
         form_data['per_week']
     ]
-    # Grab the list from the screening form.
-    available_equipment = form_data.getlist('equipment_available')
-    # Loop through list of equipment and append it to all_tags_to_filter list.
-    for equipment in available_equipment:
-        all_tags_to_filter.append(equipment)
+    all_tags_to_filter.extend(form_data.getlist('equipment_available'))
     # Adding a count field to all Programs; equals the number of tags it has.
     # then filter each program by the first item in all_tags_to_filter list.
     selected_program = Program.objects.annotate(
         count=Count('tags')
-    ).filter(
-        tags__text=available_equipment[0]
     )
     # loop through remaining items in all_tags_to_filter and add corresponding
     # filter.
-    for equipment in available_equipment[1:]:
-        selected_program = selected_program.filter(tags__text=equipment)
+    for item in all_tags_to_filter:
+        selected_program = selected_program.filter(tags__text=item)
     # filter remaining programs for count value by len of all_tags_to_filter.
     # add filter for each remaining screening question (gender/goal/etc).
     selected_program = selected_program.filter(
         count=len(all_tags_to_filter)
-    ).filter(
-        tags__text=form_data['gender']
-    ).filter(
-        tags__text=form_data['goal']
-    ).filter(
-        tags__text=form_data['experience']
-    ).filter(
-        tags__text=form_data['length']
-    ).filter(
-        tags__text=form_data['per_week']
     ).first()
     print('selected_program', selected_program)
     if not selected_program:

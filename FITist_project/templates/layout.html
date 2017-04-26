@@ -10,7 +10,16 @@
             {% if user.is_authenticated %}
                 <p>{{ user }}</p>
                 <ul>
-                    <li><a href="{% url 'profiles:user_profile' %}">My Profile</a></li>
+                    <li>
+                        <a href="{% url 'profiles:user_profile' user.username %}">
+                            My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'profiles:program' user.username %}">
+                            My Workout
+                        </a>
+                    </li>
                 </ul>
             {% else %}
                 <ul>

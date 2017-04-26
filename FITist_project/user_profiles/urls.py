@@ -3,6 +3,7 @@ from django.contrib.auth.views import login
 from django.contrib.auth.views import logout
 from user_profiles.views import create_new_user
 from user_profiles.views import get_profile
+from user_profiles.views import view_program
 from user_profiles.forms import LoginForm
 
 
@@ -21,4 +22,7 @@ urlpatterns = [
     url(r'^(?P<username>\w+)?/?$',
         get_profile,
         name='user_profile'),
+    url(r'^(?P<username>\w+)/workout_of_the_day$',
+        view_program,
+        name='program'),
 ]

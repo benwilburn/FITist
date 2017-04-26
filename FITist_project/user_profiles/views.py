@@ -36,11 +36,26 @@ def get_profile(request, username=None):
     if not username:
         return redirect('profiles:user_profile', username=curr_user.username)
     user = get_object_or_404(User, username=username)
-    if request.user == user:
+    if curr_user == user:
         return render(
             request,
             'user_profiles/profile_detail.html',
             {'user': user}
+        )
+    else:
+        return redirect('profiles:user_profile', username=curr_user.username)
+
+
+def view_program(request, username=None):
+    curr_user = request.user
+    if not username:
+        return redirect('profiles:user_profile', username=curr_user.username)
+    user = get_object_or_404(User, username=username)
+    if curr_user == user:
+        return render(
+            request,
+            'user_profiles/program.html',
+            {'program': user.profile.program_selected}
         )
     else:
         return redirect('profiles:user_profile', username=curr_user.username)

@@ -6,6 +6,27 @@
         <title>{% block title %}{% endblock %}</title>
     </head>
     <body>
+        <nav>
+            {% if user.is_authenticated %}
+                <p>{{ user }}</p>
+                <ul>
+                    <li>
+                        <a href="{% url 'profiles:user_profile' user.username %}">
+                            My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'profiles:program' user.username %}">
+                            My Workout
+                        </a>
+                    </li>
+                </ul>
+            {% else %}
+                <ul>
+                    <li><a href="{% url 'profiles:login' %}">Login</a></li>
+                </ul>
+            {% endif %}
+        </nav>
         {% block content %}{% endblock %}
     </body>
 </html>

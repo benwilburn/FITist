@@ -28,6 +28,9 @@ class Workout(models.Model):
     tags = models.ManyToManyField(Answer)
     completed = models.BooleanField(default=False)
 
+    class Meta(object):
+        ordering = ['week_number', 'order']
+
     def __str__(self):
         """Will return the name of the workout as query set description."""
         return self.name
@@ -38,7 +41,7 @@ class ExerciseGroup(models.Model):
 
     description = models.TextField()
     order = models.IntegerField(default=0)
-    workout_group_belongs_to = models.ForeignKey(
+    workout_in = models.ForeignKey(
         Workout,
         related_name='assocated_exercise_groups')
 

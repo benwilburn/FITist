@@ -5,4 +5,37 @@
 {% block content %}
     <p>Program Name: {{ program.name }}</p>
     <p>Number Of Weeks: {{ program.total_weeks }}</p>
+    {% for workout in workouts %}
+        <p>{{ workout.name }}</p>
+        {% for group in exercise_groups %}
+            {% if group.workout_in == workout %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Exercise</th>
+                            <th>Prescription</th>
+                            <th>Video</th>
+                        </tr>
+                    </thead>
+                {% for ex_block in exercise_blocks %}
+                    {% if ex_block.assigned_group == group %}
+                        <tbody>
+                            <tr>
+                                <td>{{ ex_block.exercise.name }}</td>
+                                <td>{{ ex_block.prescription }}</td>
+                                <td>Not Available</td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
+                {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <td>{{ group.description }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        {% endfor %}
+        <p>Workout Completed: {{ workout.completed }}</p>
+    {% endfor %}
 {% endblock %}
